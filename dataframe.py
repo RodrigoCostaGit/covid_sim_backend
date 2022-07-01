@@ -15,9 +15,9 @@ df = pd.read_csv(url)
 app = Flask(__name__)
 
 ## the route decorator will tell flask what url should trigger the function, and the allowed http methods
-@app.route("/hello/", methods =["GET","POST"])
+@app.route("/", methods =["GET","POST"])
 def welcome():
-    return "hello world!"
+    return "hello tiago!"
 
 #print(df)
 
@@ -28,4 +28,4 @@ def hello2():
 if __name__ == "__main__":
     #runs the flask aplication
     #host specifies the server we want our aplication to run
-    app.run(host="0.0.0.0", port = 105)
+    app.run()
