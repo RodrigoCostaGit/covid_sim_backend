@@ -28,4 +28,4 @@ def hello2():
 if __name__ == "__main__":
     #runs the flask aplication
     #host specifies the server we want our aplication to run
-    app.run(port=5000)
+    app.run()
