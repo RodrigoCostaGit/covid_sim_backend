@@ -1,8 +1,10 @@
+from curses import flash
 import pandas as pd
 from flask import Flask
 from flask import jsonify
 from flask import request
 #from dataframe import df
+request = Flask.request_class
 
 #weekly data of covid cases
 url = "https://raw.githubusercontent.com/dssg-pt/covid19pt-data/master/data.csv"
@@ -24,6 +26,14 @@ def welcome():
 @app.route("/data/")
 def hello2():
     return jsonify(df.to_json(orient ='index'))
+
+
+#preciso do site do tiago para testar isto,
+@app.before_request(methods=["GET","POST"])
+def authenticate(*args, **kwargs):
+    if request.args.get("id") != 11223344:
+        return "you dont have access"
+
 
 if __name__ == "__main__":
     #runs the flask aplication
