@@ -1,2 +1,1 @@
-web: gunicorn covid_sim_backend.wsgi
-heroku ps:scale web=1
+web: gunicorn wsgi:covid_sim_backend
