@@ -1,1 +1,1 @@
-web: gunicorn wsgi:covid_sim_backend
+web: gunicorn wsgi:app
