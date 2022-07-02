@@ -29,7 +29,7 @@ def hello2():
 
 
 #preciso do site do tiago para testar isto,
-@app.before_request(methods=["GET","POST"])
+@app.before_request()
 def authenticate(*args, **kwargs):
     if request.args.get("id") != 11223344:
         return "you dont have access"
