@@ -6,12 +6,16 @@ import uuid
 import jwt
 from functools import wraps
 import datetime
+import os 
+from dotenv import load_dotenv
+
+load_dotenv()
 
 
 #weekly data of covid cases
 url = "https://raw.githubusercontent.com/dssg-pt/covid19pt-data/master/data.csv"
 
-#initial 
+#loads the csv to df
 df = pd.read_csv(url)
 
 
@@ -21,8 +25,13 @@ app = Flask(__name__)
  
 app.config['SECRET_KEY']='004f2af45d3a4e161a7dd2d17fdae47f'
 # app.config['SQLALCHEMY_DATABASE_URI']="sqlite:////database.db"
-app.config['SQLALCHEMY_DATABASE_URI']="sqlite:////projeto final 2022\covid_sim_backend\database.db"
+# app.config['SQLALCHEMY_DATABASE_URI']="sqlite:////projeto final 2022\covid_sim_backend\database.db"
+if os.environ.get("id")=="heroku":
+    app.config['SQLALCHEMY_DATABASE_URI']=os.environ.get("database_uri")
+if os.environ.get("id")=="dev":
+    app.config['SQLALCHEMY_DATABASE_URI']=os.environ.get("database_uri")
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = True
+
  
 db = SQLAlchemy(app)
 
@@ -33,6 +42,7 @@ class Users(db.Model):
    password = db.Column(db.String(50))
    admin = db.Column(db.Boolean)
 
+#loads Users to table
 db.create_all()
 
 def token_required(f):
@@ -56,49 +66,6 @@ def token_required(f):
 
       return f(current_user, *args, **kwargs)
    return decorator
-
-
-# def token_required(f):
-#    @wraps(f)
-#    def decorator(*args, **kwargs):
-
-#     token = None
-
-#     if 'token' in request.headers:
-#         token = request.headers['token']
-
-#     if not token:
-#         return jsonify({'message': 'a valid token is missing'})
-
-    
-#     data = jwt.decode(token, app.config["SECRET_KEY"])
-#     current_user = Users.query.filter_by(public_id=data['public_id']).first()
-
-
-#     return f(current_user, *args, **kwargs)
-#    return decorator
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 

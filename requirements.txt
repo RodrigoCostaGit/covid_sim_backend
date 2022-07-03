@@ -3,3 +3,8 @@ flask
 gunicorn
 werkzeug
 flask_sqlalchemy
+os
+uuid
+functools
+jwt
+dotenv
