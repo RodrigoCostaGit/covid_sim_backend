@@ -5,4 +5,4 @@ werkzeug
 flask_sqlalchemy
 uuid
 jwt
-dotenv
+
