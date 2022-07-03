@@ -7,8 +7,7 @@ import jwt
 from functools import wraps
 import datetime
 import os 
-from dotenv import load_dotenv
-load_dotenv()
+
 
 
 #weekly data of covid cases
