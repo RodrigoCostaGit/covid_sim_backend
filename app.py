@@ -25,9 +25,9 @@ app = Flask(__name__)
 app.config['SECRET_KEY']='004f2af45d3a4e161a7dd2d17fdae47f'
 # app.config['SQLALCHEMY_DATABASE_URI']="sqlite:////database.db"
 # app.config['SQLALCHEMY_DATABASE_URI']="sqlite:////projeto final 2022\covid_sim_backend\database.db"
-if os.environ.get("id")=="heroku":
+if os.environ.get("enviro")=="production":
     app.config['SQLALCHEMY_DATABASE_URI']=os.environ.get("database_uri")
-if os.environ.get("id")!="dev":
+if os.environ.get("enviro")!="production":
     from dotenv import load_dotenv
     load_dotenv()
     app.config['SQLALCHEMY_DATABASE_URI']=os.environ.get("database_uri")
