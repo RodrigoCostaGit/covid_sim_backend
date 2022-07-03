@@ -4,5 +4,5 @@ gunicorn
 werkzeug
 flask_sqlalchemy
 uuid
-jwt
+pyjwt
 
