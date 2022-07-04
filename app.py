@@ -99,9 +99,11 @@ def hello2(key):
     return jsonify(df.to_json(orient ='index'))
 
 
-#preciso do site do tiago para testar isto,
-# Authentication decorator
 
+@app.route("/prevision/",methods =["GET","POST"])
+@token_required
+def predict(key):
+    pass
 
 
 if __name__ == "__main__":
