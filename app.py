@@ -17,6 +17,11 @@ url = "https://raw.githubusercontent.com/dssg-pt/covid19pt-data/master/data.csv"
 #loads the csv to df
 df = pd.read_csv(url)
 
+#daily data covid
+url2 = "https://raw.githubusercontent.com/dssg-pt/covid19pt-data/master/dados_diarios.csv"
+
+#loads the csv to df2
+df2 = pd.read_csv(url2)
 
 #instance of flask class
 app = Flask(__name__)
@@ -105,7 +110,17 @@ def hello2(key):
 @app.route("/prediction", methods =["GET"])
 def pred():
   return json.dumps(pred_run().tolist())
-    
+
+
+@app.route("/internados",methods =["GET"])
+@token_required
+def internados():
+  return jsonify(df["internados","internados_uci"])
+
+@app.route("/casos_diarios",methods =["GET"])
+@token_required
+def diarios():
+  return jsonify(df2["confirmados_novos"])
 
 if __name__ == "__main__":
     #runs the flask aplication
