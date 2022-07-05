@@ -1,3 +1,4 @@
+import json
 import pandas as pd
 from flask import Flask, jsonify, make_response,request
 from werkzeug.security import generate_password_hash,check_password_hash
@@ -7,7 +8,7 @@ import jwt
 from functools import wraps
 import datetime
 import os 
-
+from seir_model import pred_run
 
 
 #weekly data of covid cases
@@ -44,6 +45,8 @@ class Users(db.Model):
 
 #loads Users to table
 db.create_all()
+
+
 
 def token_required(f):
    @wraps(f)
@@ -98,13 +101,10 @@ def welcome():
 def hello2(key):
     return jsonify(df.to_json(orient ='index'))
 
-
-
-@app.route("/prevision/",methods =["GET","POST"])
-@token_required
-def predict(key):
-    pass
-
+@app.route("/prediction", methods =["GET"])
+def pred():
+  return json.dumps(pred_run().tolist())
+    
 
 if __name__ == "__main__":
     #runs the flask aplication
