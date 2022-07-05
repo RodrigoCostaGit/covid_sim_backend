@@ -99,7 +99,8 @@ def welcome():
 @app.route("/data/",methods =["GET","POST"])
 @token_required
 def hello2(key):
-    return jsonify(df.to_json(orient ='index'))
+    # return jsonify(df.to_json(orient ='index'))
+    return jsonify(df.to_json())
 
 @app.route("/prediction", methods =["GET"])
 def pred():
