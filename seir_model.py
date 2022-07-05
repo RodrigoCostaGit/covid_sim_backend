@@ -12,7 +12,7 @@ from scipy.integrate import odeint
 import numpy as np
 import pandas as pd
 
-import matplotlib.pyplot as plt
+
 
 
 # #daily data covid, (data,confirmados, confirmados_novos,obitos, obitos_novos)
