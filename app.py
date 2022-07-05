@@ -26,6 +26,16 @@ df2 = pd.read_csv(url2)
 #instance of flask class
 app = Flask(__name__)
 
+#vaccine data with 2nd shot data
+url3 = "https://raw.githubusercontent.com/dssg-pt/covid19pt-data/master/vacinas.csv"
+#loads the csv to df3
+df3 = pd.read_csv(url3)
+
+#vaccine data with 1nd shot data
+url4 = "https://raw.githubusercontent.com/dssg-pt/covid19pt-data/master/vacinas_detalhe.csv"
+df4 = pd.read_csv(url4)
+
+
  
 app.config['SECRET_KEY']='004f2af45d3a4e161a7dd2d17fdae47f'
 # app.config['SQLALCHEMY_DATABASE_URI']="sqlite:////database.db"
@@ -105,7 +115,7 @@ def welcome():
 @token_required
 def hello2(key):
     # return jsonify(df.to_json(orient ='index'))
-    return jsonify(df.to_json())
+    return df.to_json(orient="index")
 
 @app.route("/prediction", methods =["GET"])
 def pred():
@@ -115,12 +125,20 @@ def pred():
 @app.route("/internados",methods =["GET"])
 @token_required
 def internados(key):
-  return jsonify(df[["internados","internados_uci"]].to_json())
+  return df[["data","internados","internados_uci","obitos"]].to_json(orient="index")
 
 @app.route("/casos_diarios",methods =["GET"])
 @token_required
 def diarios(key):
-  return jsonify(df2[["data","confirmados_novos"]].to_json())
+  return df2[["data","confirmados_novos"]].to_json(orient="index")
+
+# @app.route("/vacinados_idade",methods=["GET"])
+# @token_required
+# def vacinados_idade(key):
+#   return df4[""]
+
+
+
 
 if __name__ == "__main__":
     #runs the flask aplication
