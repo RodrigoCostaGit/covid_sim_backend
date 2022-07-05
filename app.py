@@ -114,12 +114,12 @@ def pred():
 
 @app.route("/internados",methods =["GET"])
 @token_required
-def internados():
+def internados(key):
   return jsonify(df["internados","internados_uci"])
 
 @app.route("/casos_diarios",methods =["GET"])
 @token_required
-def diarios():
+def diarios(key):
   return jsonify(df2["confirmados_novos"])
 
 if __name__ == "__main__":
