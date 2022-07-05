@@ -115,12 +115,12 @@ def pred():
 @app.route("/internados",methods =["GET"])
 @token_required
 def internados(key):
-  return jsonify(df["internados","internados_uci"].to_json())
+  return jsonify(df[["internados","internados_uci"]].to_json())
 
 @app.route("/casos_diarios",methods =["GET"])
 @token_required
 def diarios(key):
-  return jsonify(df2["confirmados_novos"].to_json())
+  return jsonify(df2[["data","confirmados_novos"]].to_json())
 
 if __name__ == "__main__":
     #runs the flask aplication
