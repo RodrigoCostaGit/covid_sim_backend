@@ -15,6 +15,7 @@ index = df2.head().index.values
 index = index[0]
 df2 = df2.rename(index={index:"info"})
 df2 = df2.T
+df2 = df2.head(-2)
 print(df2)
 
 df2.to_csv("data_regions.csv")
