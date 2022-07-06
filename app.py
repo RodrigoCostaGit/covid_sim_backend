@@ -130,12 +130,15 @@ def internados(key):
 @app.route("/casos_diarios",methods =["GET"])
 @token_required
 def diarios(key):
+  cols = df2.columns.difference(["data"])
+  # d = (df2.groupby('data')[cols]
+  #       .apply(lambda x: x.to_dict('r'))
+  #       .reset_index(name='info')
+  #       .to_json(orient='records'))
   return df2[["data","confirmados_novos"]].to_json(orient="index")
 
-# @app.route("/vacinados_idade",methods=["GET"])
-# @token_required
-# def vacinados_idade(key):
-#   return df4[""]
+
+
 
 
 
@@ -144,3 +147,4 @@ if __name__ == "__main__":
     #runs the flask aplication
     #host specifies the server we want our aplication to run
     app.run()
+
