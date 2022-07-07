@@ -112,7 +112,7 @@ def welcome():
 #print(df)
 
 @app.route("/data/",methods =["GET","POST"])
-@token_required
+# @token_required
 def hello2(key):
     # return jsonify(df.to_json(orient ='index'))
     return df.to_json(orient="index")
