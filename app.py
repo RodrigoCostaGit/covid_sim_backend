@@ -137,8 +137,16 @@ def diarios(key):
   #       .to_json(orient='records'))
   return df2[["data","confirmados_novos"]].to_json(orient="index")
 
+# @app.route("/vacinados",methods =["GET"])
+# @token_required
+# def vacinados(key):
+#   cols = df2.columns.difference(["data"])
+#   return df2[["data","confirmados_novos"]].to_json(orient="index")
 
-
+@app.route("/get_obitos",methods =["GET"])
+@token_required
+def diarios(key):
+  return df2[["data","obitos","obitos_novos"]].to_json(orient="index")
 
 
 
