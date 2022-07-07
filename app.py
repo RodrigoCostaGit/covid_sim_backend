@@ -112,9 +112,10 @@ def welcome():
 #print(df)
 
 @app.route("/data/",methods =["GET","POST"])
-def hello2(key):
+def hello2():
     # return jsonify(df.to_json(orient ='index'))
     return df.to_json(orient="index")
+
 
 @app.route("/prediction", methods =["GET"])
 def pred():
