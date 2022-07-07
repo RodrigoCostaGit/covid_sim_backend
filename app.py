@@ -130,22 +130,13 @@ def internados(key):
 @app.route("/casos_diarios",methods =["GET"])
 @token_required
 def diarios(key):
-  cols = df2.columns.difference(["data"])
-  # d = (df2.groupby('data')[cols]
-  #       .apply(lambda x: x.to_dict('r'))
-  #       .reset_index(name='info')
-  #       .to_json(orient='records'))
   return df2[["data","confirmados_novos"]].to_json(orient="index")
 
-# @app.route("/vacinados",methods =["GET"])
-# @token_required
-# def vacinados(key):
-#   cols = df2.columns.difference(["data"])
-#   return df2[["data","confirmados_novos"]].to_json(orient="index")
+
 
 @app.route("/get_obitos",methods =["GET"])
 @token_required
-def diarios(key):
+def obitos(key):
   return df2[["data","obitos","obitos_novos"]].to_json(orient="index")
 
 
