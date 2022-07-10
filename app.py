@@ -35,9 +35,13 @@ df3 = pd.read_csv(url3)
 url4 = "https://raw.githubusercontent.com/dssg-pt/covid19pt-data/master/vacinas_detalhe.csv"
 df4 = pd.read_csv(url4)
 
-
- 
-app.config['SECRET_KEY']='004f2af45d3a4e161a7dd2d17fdae47f'
+if os.environ.get("enviro")=="production":
+    app.config["SECRET_KEY"]=os.environ.get("SECRET_KEY")
+else:
+  from dotenv import load_dotenv
+  load_dotenv()
+  app.config["SECRET_KEY"]=os.environ.get("SECRET_KEY")
+# app.config['SECRET_KEY']='004f2af45d3a4e161a7dd2d17fdae47f'
 # app.config['SQLALCHEMY_DATABASE_URI']="sqlite:////database.db"
 # app.config['SQLALCHEMY_DATABASE_URI']="sqlite:////projeto final 2022\covid_sim_backend\database.db"
 if os.environ.get("enviro")=="production":
@@ -64,26 +68,26 @@ db.create_all()
 
 
 def token_required(f):
-   @wraps(f)
-   def decorator(*args, **kwargs):
+  @wraps(f)
+  def decorator(*args, **kwargs):
 
-      token = None
+    token = None
 
-      if 'token' in request.headers:
-        token = request.headers['token']
+    if 'token' in request.headers:
+      token = request.headers['token']
 
-      if not token:
-        return jsonify({'message': 'a valid token is missing'})
+    if not token:
+      return jsonify({'message': 'a valid token is missing'})
 
-      try:
-        data = jwt.decode(token, app.config["SECRET_KEY"],algorithms=["HS256"])
-        current_user = Users.query.filter_by(public_id=data['public_id']).first()
-      except:
-        return jsonify({'message': 'token is invalid'})
+    try:
+      data = jwt.decode(token, app.config["SECRET_KEY"],algorithms=["HS256"])
+      current_user = Users.query.filter_by(public_id=data['public_id']).first()
+    except:
+      return jsonify({'message': 'token is invalid'})
 
 
-      return f(current_user, *args, **kwargs)
-   return decorator
+    return f(current_user, *args, **kwargs)
+  return decorator
 
 
 
@@ -104,7 +108,6 @@ def login_user():
 
 
 ## the route decorator will tell flask what url should trigger the function, and the allowed http methods
-
 @app.route("/", methods =["GET","POST"])
 def welcome():
     return "hello tiago!"
@@ -118,7 +121,8 @@ def hello2():
 
 
 @app.route("/prediction", methods =["GET"])
-def pred():
+@token_required
+def pred(key):
   return json.dumps(pred_run().tolist())
 
 
