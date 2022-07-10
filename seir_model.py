@@ -6,7 +6,7 @@ import pandas as pd
 
 
 
-def diferencial_equation(a,beta,gamma,total_population):
+def diferencial_equation(a,time,beta,gamma,total_population):
     s = a[0]
     i = a[1]
     r = a[2]
@@ -70,6 +70,6 @@ def pred_run():
     return solution
 
 
-# pred_run()
+print(pred_run())
 
 
