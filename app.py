@@ -34,12 +34,10 @@ url4 = "https://raw.githubusercontent.com/dssg-pt/covid19pt-data/master/vacinas_
 df4 = pd.read_csv(url4)
 
 
-if os.environ.get("enviro")=="production":  ## this will check if the code is in production or development, 
-    app.config["SECRET_KEY"]=os.environ.get("SECRET_KEY")
-else:
-  from dotenv import load_dotenv
-  load_dotenv()
-  app.config["SECRET_KEY"]=os.environ.get("SECRET_KEY")
+ 
+app.config['SECRET_KEY']='004f2af45d3a4e161a7dd2d17fdae47f'
+# app.config['SQLALCHEMY_DATABASE_URI']="sqlite:////database.db"
+# app.config['SQLALCHEMY_DATABASE_URI']="sqlite:////projeto final 2022\covid_sim_backend\database.db"
 if os.environ.get("enviro")=="production":
     app.config['SQLALCHEMY_DATABASE_URI']=os.environ.get("database_uri")
 else:
@@ -67,20 +65,26 @@ db.create_all()
 ## if the header is valid, i will try to decode the token using the secret key saved in the env file
 ## it will then search the db for a valid public id, if it doesnt find any, it will throa
 def token_required(f):
-  @wraps(f)
-  def decorator(*args, **kwargs):
-    token = None
-    if 'token' in request.headers:
-      token = request.headers['token']
-    if not token:
-      return jsonify({'message': 'a valid token is missing'})
-    try:
-      data = jwt.decode(token, app.config["SECRET_KEY"],algorithms=["HS256"])
-      current_user = Users.query.filter_by(public_id=data['public_id']).first()
-    except:
-      return jsonify({'message': 'token is invalid'})
-    return f(current_user, *args, **kwargs)
-  return decorator
+   @wraps(f)
+   def decorator(*args, **kwargs):
+
+      token = None
+
+      if 'token' in request.headers:
+        token = request.headers['token']
+
+      if not token:
+        return jsonify({'message': 'a valid token is missing'})
+
+      try:
+        data = jwt.decode(token, app.config["SECRET_KEY"],algorithms=["HS256"])
+        current_user = Users.query.filter_by(public_id=data['public_id']).first()
+      except:
+        return jsonify({'message': 'token is invalid'})
+
+
+      return f(current_user, *args, **kwargs)
+   return decorator
 
 
 ## this function will check if the username is in the database, if it is, it will then compare the given passwork
@@ -101,7 +105,6 @@ def login_user():
 
 ## the route decorator will tell flask what url should trigger the function, and the allowed http methods
 
-## the home page
 @app.route("/", methods =["GET","POST"])
 def welcome():
     return "Send a mail to rodrigoafonsocostawork@gmail.com to request acess to this api"
@@ -116,8 +119,7 @@ def hello2():
 
 #returns a json with a list of the predictions of the sir model.
 @app.route("/prediction", methods =["GET"])
-@token_required
-def pred(key):
+def pred():
   return json.dumps(pred_run().tolist())
 
 #returns a json with the date, number of people hospitalized, number of people in intensive care, and deaths
