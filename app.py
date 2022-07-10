@@ -1,10 +1,12 @@
 import json
 import pandas as pd
 from flask import Flask, jsonify, make_response,request
-from werkzeug.security import check_password_hash
+from werkzeug.security import generate_password_hash,check_password_hash
 from flask_sqlalchemy import SQLAlchemy
+import uuid
 import jwt
 from functools import wraps
+import datetime
 import os 
 from seir_model import pred_run
 
@@ -49,7 +51,6 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = True
  
 db = SQLAlchemy(app)
 
-#user class where authorized users of the API will be stored.
 class Users(db.Model):
    id = db.Column(db.Integer, primary_key=True)
    public_id = db.Column(db.Integer)
@@ -61,9 +62,7 @@ class Users(db.Model):
 db.create_all()
 
 
-# this function will authenticate the token that was given in the login function
-## if the header is valid, i will try to decode the token using the secret key saved in the env file
-## it will then search the db for a valid public id, if it doesnt find any, it will throa
+
 def token_required(f):
    @wraps(f)
    def decorator(*args, **kwargs):
@@ -87,19 +86,20 @@ def token_required(f):
    return decorator
 
 
-## this function will check if the username is in the database, if it is, it will then compare the given passwork
-## with the hashed password stored in the database, if it succeeds, with will give out a unique token based on the user unique
-# id, to be used for authentication
-## if it fails, it will throw out a error message.
+
 @app.route('/login', methods=['POST']) 
 def login_user():
    auth = request.authorization  
    if not auth or not auth.username or not auth.password: 
        return make_response('could not verify', 401, {'Authentication': 'login required"'})   
+ 
    user = Users.query.filter_by(name=auth.username).first()  
    if check_password_hash(user.password, auth.password):
+    #    token = jwt.encode({'public_id' : user.public_id, 'exp' : datetime.datetime.utcnow() + datetime.timedelta(minutes=45)}, app.config['SECRET_KEY'], "HS256")
        token = jwt.encode({'public_id' : user.public_id}, app.config['SECRET_KEY'], "HS256")
+
        return jsonify({'token' : token})
+ 
    return make_response('could not verify',  401, {'Authentication': '"login required"'})
 
 
@@ -107,47 +107,36 @@ def login_user():
 
 @app.route("/", methods =["GET","POST"])
 def welcome():
-    return "Send a mail to rodrigoafonsocostawork@gmail.com to request acess to this api"
+    return "hello tiago!"
 
+#print(df)
 
-#returns all the raw data from the weekly dataset
 @app.route("/data/",methods =["GET","POST"])
-@token_required
 def hello2():
     # return jsonify(df.to_json(orient ='index'))
     return df.to_json(orient="index")
 
-#returns a json with a list of the predictions of the sir model.
+
 @app.route("/prediction", methods =["GET"])
 def pred():
   return json.dumps(pred_run().tolist())
 
-#returns a json with the date, number of people hospitalized, number of people in intensive care, and deaths
+
 @app.route("/internados",methods =["GET"])
 @token_required
 def internados(key):
   return df[["data","internados","internados_uci","obitos"]].to_json(orient="index")
 
-#returns a json with the date, and the number of new covid cases daily
 @app.route("/casos_diarios",methods =["GET"])
 @token_required
 def diarios(key):
-  cols = df2.columns.difference(["data"])
-  # d = (df2.groupby('data')[cols]
-  #       .apply(lambda x: x.to_dict('r'))
-  #       .reset_index(name='info')
-  #       .to_json(orient='records'))
   return df2[["data","confirmados_novos"]].to_json(orient="index")
 
-# @app.route("/vacinados",methods =["GET"])
-# @token_required
-# def vacinados(key):
-#   cols = df2.columns.difference(["data"])
-#   return df2[["data","confirmados_novos"]].to_json(orient="index")
+
 
 @app.route("/get_obitos",methods =["GET"])
 @token_required
-def diarios(key):
+def obitos(key):
   return df2[["data","obitos","obitos_novos"]].to_json(orient="index")
 
 
@@ -157,4 +146,3 @@ if __name__ == "__main__":
     #runs the flask aplication
     #host specifies the server we want our aplication to run
     app.run()
-

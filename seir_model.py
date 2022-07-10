@@ -1,7 +1,16 @@
+#todo:
+#usar a base de dados com dados diarios
+#total population
+#susceptible população total tuga - infected - recovered (some website with current tuga pop)
+#infected(use data from last 7 days) (daily)
+#rercovered =confirmados+obitos - infected (daily)
+# r0, i think there is a database for that too
+#beta = rt
+#gamma = 1/14
+
 from scipy.integrate import odeint
 import numpy as np
 import pandas as pd
-# import matplotlib.pyplot as plt
 
 
 
@@ -70,10 +79,5 @@ def pred_run():
     time = np.arange(0,60,1)
     solution = odeint(diferencial_equation,y0 =[s,i,r],t =time,args = (beta,gamma,total_population))
     return solution
-
-
-
-
-# pred_run()
 
 
