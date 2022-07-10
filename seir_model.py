@@ -1,7 +1,6 @@
 from scipy.integrate import odeint
 import numpy as np
 import pandas as pd
-# import matplotlib.pyplot as plt
 
 
 
@@ -17,18 +16,7 @@ def diferencial_equation(a,time,beta,gamma,total_population):
         
     ]
 
-# solution = odeint(diferencial_equation,y0 =[s,i,r],t =time,args = (beta,gamma,total_population))
 
-# S = solution.T[0]
-# I = solution.T[1]
-# R = solution.T[2]
-
-# plt.plot(time,S)
-# plt.plot(time,I)
-# plt.plot(time,R)
-# plt.show()
-
-# print(solution)
 
 def pred_run():
     #daily data covid, (data,confirmados, confirmados_novos,obitos, obitos_novos)
@@ -49,27 +37,13 @@ def pred_run():
     gamma = 1/14 #14= dias em media para recuperar de covid
     time = np.arange(0,60,1) 
     solution = odeint(diferencial_equation,y0 =[s,i,r],t =time,args = (beta,gamma,total_population))
-    # solution = odeint(diferencial_equation,y0 =[s,i,r],t =time,args = (gamma,beta,total_population))
 
 
-    # S = solution.T[0]
-    # I = solution.T[1]
-    # R = solution.T[2]
-
-    # plt.plot(time,S)
-    # plt.plot(time,I)
-    # plt.plot(time,R)
-    # plt.show()
-    # print(s)
-    # print(i)
-    # print(r)
-    # print(beta)
-    # print(gamma)
 
 
     return solution
 
 
-print(pred_run())
+
 
 
