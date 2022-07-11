@@ -1,5 +1,5 @@
 import pandas as pd
-
+##this file will create a csv that will be read by the datawrapper app that will display the number of cases per region
 #weekly data of covid cases
 url = "https://raw.githubusercontent.com/dssg-pt/covid19pt-data/master/data.csv"
 
