@@ -1,5 +1,5 @@
 import json
-import pandas as pd
+import pandas as pd 
 from flask import Flask, jsonify, make_response,request
 from werkzeug.security import check_password_hash
 from flask_sqlalchemy import SQLAlchemy
@@ -33,34 +33,34 @@ df3 = pd.read_csv(url3)
 url4 = "https://raw.githubusercontent.com/dssg-pt/covid19pt-data/master/vacinas_detalhe.csv"
 df4 = pd.read_csv(url4)
 
-
-if os.environ.get("enviro")=="production":  ## this will check if the code is in production or development, 
-    app.config["SECRET_KEY"]=os.environ.get("SECRET_KEY")
-else:
-  from dotenv import load_dotenv
-  load_dotenv()
-  app.config["SECRET_KEY"]=os.environ.get("SECRET_KEY")
-if os.environ.get("enviro")=="production":
-    app.config['SQLALCHEMY_DATABASE_URI']=os.environ.get("database_uri")
-else:
+with app.app_context():
+  if os.environ.get("enviro")=="production":  ## this will check if the code is in production or development, 
+      app.config["SECRET_KEY"]=os.environ.get("SECRET_KEY")
+  else:
     from dotenv import load_dotenv
     load_dotenv()
-    app.config['SQLALCHEMY_DATABASE_URI']=os.environ.get("database_uri")
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = True
+    app.config["SECRET_KEY"]=os.environ.get("SECRET_KEY")
+  if os.environ.get("enviro")=="production":
+      app.config['SQLALCHEMY_DATABASE_URI']=os.environ.get("database_uri")
+  else:
+      from dotenv import load_dotenv
+      load_dotenv()
+      app.config['SQLALCHEMY_DATABASE_URI']=os.environ.get("database_uri")
+  app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = True
 
  
-db = SQLAlchemy(app)
+  db = SQLAlchemy(app)
 
-#user class where authorized users of the API will be stored.
-class Users(db.Model):
-   id = db.Column(db.Integer, primary_key=True)
-   public_id = db.Column(db.Integer)
-   name = db.Column(db.String(50))
-   password = db.Column(db.String(50))
-   admin = db.Column(db.Boolean)
+  #user class where authorized users of the API will be stored.
+  class Users(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    public_id = db.Column(db.Integer)
+    name = db.Column(db.String(50))
+    password = db.Column(db.String(50))
+    admin = db.Column(db.Boolean)
 
-#loads Users to table
-db.create_all()
+  #loads Users to table
+  db.create_all()
 
 
 # this function will authenticate the token that was given in the login function
