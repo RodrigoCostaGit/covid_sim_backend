@@ -14,4 +14,3 @@ def signup_user(password,name):
 
 
 
-signup_user("298sdgf3tsdgf","dotinho")
